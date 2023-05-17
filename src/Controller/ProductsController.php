@@ -109,7 +109,7 @@ class ProductsController extends AbstractController
         }
     }
     #[Route('/menu/product/delete', name: 'product/delete')]
-    public function deleteProduct(EntityManagerInterface $em): \Symfony\Component\HttpFoundation\Response
+    public function deleteProduct(EntityManagerInterface $em, Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $repository = $em->getRepository(Product::class);
         $products = $repository->findAll();
