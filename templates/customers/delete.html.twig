@@ -1,0 +1,21 @@
+{% extends "/user/user.html.twig" %}
+{% block selected %}
+    <form action="/menu/customer/delete" name="customer_delete" method="post">
+        <div class="delete_customer">
+            <p>Delete customer</p>
+            <div class="flex-row flex">
+                {% for customer in customers %}
+                    <div class="m-5 product-block edit_block">
+                        <ul class="text-sm-left">
+                            <li id="product-id"><span class="font-weight-bold">#</span>{{ customer.id }}</li>
+                            <hr>
+                            <li><input class="font-weight-bold" value="{{ customer.name }}"></li>
+                            <li>Delete <input type="checkbox" name="checkboxes[]" value="{{ customer.id }}"></li>
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="submit">Delete</button>
+        </div>
+    </form>
+{% endblock %}

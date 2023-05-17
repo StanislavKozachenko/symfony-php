@@ -1,0 +1,58 @@
+{% extends "/user/user.html.twig" %}
+{% block selected %}
+    <form action="/menu/product/edit" name="product_edit" method="post">
+        <div class="edit_customer edit_product">
+            <p>Edit product</p>
+            <div class="flex-row flex">
+                {% for product in products %}
+                    <div class="m-5 product-block edit_block">
+                        <ul class="text-sm-left">
+                            <li><input class="font-weight-bold" name="product-id[]" value="{{ product.id }}" disabled hidden></li>
+                            <li id="product-id"> {{ product.id }}</li>
+                            <hr>
+                            <li>Name: <input class="font-weight-bold" placeholder="{{ product.name }}" name="product-name[]" value="{{ product.name }}"></li>
+                            <hr>
+                            <li>Cost: <input class="font-weight-bold" placeholder="{{ product.cost }}" name="product-cost[]" value="{{ product.cost }}"></li>
+                            <hr>
+                            <li>Description: <textarea class="font-weight-bold" placeholder="{{ product.description }}" name="product-description[]">{{ product.description }}</textarea></li>
+                            <hr>
+                            <li>
+                                <ul id="product-services">
+                                    Services:
+                                    {% for service in services %}
+                                            {% if service in product.services %}
+                                                <li>
+                                                    <input checked type="checkbox" name="product-checkboxes[{{ product.id }}][]" value="{{ service.id }}">
+                                                    <div>{{ service.id }} | {{ service.name }} | {{ service.cost }} | {{ service.releaseDate|date("Y/m/d") }}</div>
+                                                </li>
+                                            {% else %}
+                                                <li>
+                                                    <input type="checkbox" name="product-checkboxes[{{ product.id }}][]" value="{{ service.id }}">
+                                                    <div>{{ service.id }} | {{ service.name }} | {{ service.cost }} | {{ service.releaseDate|date("Y/m/d") }}</div>
+                                                </li>
+                                            {% endif %}
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                            <hr>
+                            <li>
+                                Customer:
+                                <select name="product-customer[]" id="product-customer">
+                                    {% for customer in customers %}
+                                        {% if product.customer.name == customer.name %}
+                                            <option selected value="{{ customer.id }}">{{ customer.id }} | {{ customer.name }}</option>
+                                            {% else %}<option value="{{ customer.id }}">{{ customer.id }} | {{ customer.name }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                </select>
+                            </li>
+                            <hr>
+                           <li>Release date: <input class="font-weight-bold" placeholder="{{ product.releaseDate|date("Y/m/d") }}" name="product-release[]" value="{{ product.releaseDate|date("d/m/Y") }}"></li>
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="submit">Edit</button>
+        </div>
+    </form>
+{% endblock %}

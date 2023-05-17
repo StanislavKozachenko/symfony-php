@@ -1,0 +1,39 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    {% if app.user.roles[0] == 'ROLE_ADMIN' %}
+        Admin panel
+    {% else %}
+        Client panel
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="container main-block flex-wrap admin-menu">
+        {% if app.user.roles[0] == 'ROLE_ADMIN' %}
+            <form action="/select" method="post">
+                <div>
+                        <select name="admin_select" id="admin_select">
+                            <option value="customer/add">Add customer</option>
+                            <option value="customer/edit">Edit customer</option>
+                            <option value="customer/delete">Delete customer</option>
+                            <option value="service/add">Add service</option>
+                            <option value="service/edit">Edit service</option>
+                            <option value="service/delete">Delete service</option>
+                            <option value="product/add">Add product</option>
+                            <option value="product/edit">Edit product</option>
+                            <option value="product/delete">Delete product</option>
+                        </select>
+                </div>
+                <div>
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+                <div>
+                    {% block selected %}{% endblock %}
+                </div>
+                {% else %}
+                <p>You're not an admin</p>
+        {% endif %}
+    </div>
+{% endblock %}

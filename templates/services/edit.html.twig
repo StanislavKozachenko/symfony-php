@@ -1,0 +1,24 @@
+{% extends "/user/user.html.twig" %}
+{% block selected %}
+    <form action="/menu/service/edit" name="service_edit" method="post">
+        <div class="edit_customer edit_service">
+            <p>Edit service</p>
+            <div class="flex-row flex">
+                {% for service in services %}
+                    <div class="m-5 product-block edit_block">
+                        <ul class="text-sm-left">
+                            <li id="product-id"><span class="font-weight-bold">#</span>{{ service.id }}</li>
+                            <hr>
+                            <li><input class="font-weight-bold" placeholder="{{ service.name }}" name="service-name[]" value="{{ service.name }}"></li>
+                            <hr>
+                            <li><input class="font-weight-bold" placeholder="{{ service.cost }}" name="service-cost[]" value="{{ service.cost }}"></li>
+                            <hr>
+                            <li><input class="font-weight-bold" placeholder="{{ service.releaseDate|date("Y/m/d") }}" name="service-release[]" value="{{ service.releaseDate|date("d/m/Y") }}"></li>
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="submit">Edit</button>
+        </div>
+    </form>
+{% endblock %}

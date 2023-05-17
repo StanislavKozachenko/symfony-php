@@ -1,0 +1,32 @@
+{% extends "/user/user.html.twig" %}
+{% block selected %}
+    <form action="/menu/product/add" name="product_add" method="post">
+        <div class="add_customer add_product">
+            <p>Add product</p>
+            <input type="text" name="name" placeholder="Name...">
+            <input type="text" name="cost" placeholder="Cost...">
+            <textarea type="text" name="description" placeholder="Description..."></textarea>
+            <label for="product-customer">Customer</label>
+            <select name="customer" id="product-customer">
+                {% for customer in customers %}
+                    <option value="{{ customer.id }}">{{ customer.id }} | {{ customer.name }}</option>
+                {% endfor %}
+            </select>
+            <ul id="product-services">
+                Services:
+                {% for service in services %}
+                    <li>
+                        <label>
+                            <input type="checkbox" name="checkboxes[]" value="{{ service.id }}">
+                        </label>
+                        <div>{{ service.id }} | {{ service.name }} | {{ service.cost }} | {{ service.releaseDate|date("Y/m/d") }}</div>
+                    </li>
+              {% endfor %}
+            </ul>
+            <button type="submit">Send</button>
+        </div>
+        <div>
+            {{ status ? 'Add success!' : '' }}
+        </div>
+    </form>
+{% endblock %}

@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  php-fpm:
+    container_name: php-fpm
+    build:
+      context: ./../
+      dockerfile: ./docker/php-fpm/Dockerfile
+      args:
+        - PUID=1000
+        - PGID=1000
+        - INSTALL_XDEBUG=true
+    environment:
+      PHP_IDE_CONFIG: "serverName=Docker"
+    volumes:
+      - /var/www/vendor/
+      - ./../:/var/www/
+
+  nginx:
+    container_name: nginx
+    build:
+      context: ./nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - ..:/var/www:rw
+    depends_on:
+      - php-fpm
+
+  mysql:
+    image: mysql
+    volumes:
+      - "./data/db:/var/lib/mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3308:3306"
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
+    ports:
+      - "8088:80"
+
+volumes:
+  db_data:

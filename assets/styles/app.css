@@ -1,0 +1,162 @@
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+ul {
+    list-style: none;
+}
+textarea {
+    width: 100%;
+}
+.product-block li textarea {
+    min-height: 100px;
+}
+.main-block {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+.product-block {
+    font-family: "Roboto Light", sans-serif;
+    padding: 15px 10px;
+    width: 300px;
+    color: rgb(45, 45, 45);
+    /*box-shadow: 0 4px 23px -2px rgba(34, 60, 80, 0.2);*/
+    border-radius: 4px;
+    border: 1px solid rgba(187, 187, 187, 0.8);
+    /*background: rgba(187,187,187,0.2);*/
+    cursor: pointer;
+    transition: .4s;
+}
+.product-block:hover {
+    transform: translateY(2px);
+}
+.product-block > ul li {
+    padding: 10px 0;
+}
+#product-id {
+    padding-top: 0;
+    font-size: 40px;
+    color: rgba(187, 187, 187, 0.8);
+}
+#product-id li:nth-child(2) {
+    font-size: 14px;
+    padding-top: 0;
+}
+.font-weight-bold {
+    font-weight: bold;
+}
+header span {
+    padding: 5px 0;
+    font-size: 29px;
+}
+.main-block-show {
+    flex-direction: column;
+    align-items: center;
+}
+select[name="services"]{
+    margin: 20px 0;
+}
+.go-back {
+    text-decoration: underline;
+}
+header {
+    background:rgba(16,10,4,0.93);
+    padding: 15px 0;
+}
+header .container {
+    padding: 0 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+header a {
+    color: #fff;
+    margin: 0 10px;
+}
+header p {
+    color: #fff;
+    font-weight: bold;
+}
+.main-block h1 {
+    font-size: 30px;
+    margin-bottom: 30px;
+}
+form[name="auth_form"] {
+    display: flex;
+    flex-direction: column;
+}
+form[name="auth_form"] > * {
+    margin-bottom: 10px;
+}
+form[name="registration_form"] div, form[name="auth_form"] {
+    text-align: center;
+    padding: 7px 0;
+}
+form[name="registration_form"] div label, form[name="auth_form"] label {
+    display: block;
+}
+form[name="registration_form"] div input, form[name="auth_form"] input {
+    border-bottom: 1px solid #000;
+}
+form[name="registration_form"] button, form[name="auth_form"] button  {
+    padding: 5px 7px;
+    border-radius: 5px;
+    border: 1px solid #000;
+    transition: .2s;
+}
+form[name="registration_form"] button:hover, form[name="auth_form"] button:hover {
+    background: #000;
+    color: #fff;
+    transition: .2s;
+}
+.reg_block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.admin-menu {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.admin-menu form > div {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.admin-menu div button {
+    margin-top: 10px;
+    padding: 4px 7px;
+    border: 1px solid #000;
+    border-radius: 4px;
+    transition: .2s;
+    cursor: pointer;
+}
+.admin-menu div button:hover {
+    background: #000;
+    color: #fff;
+    transition: .2s;
+}
+.edit_customer, .add_customer, .delete_customer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.edit_block input {
+    max-width: 120px;
+}
+#product-services li {
+    display: flex;
+}
+.add_product textarea, input[type="text"] {
+    min-width: 180px;
+}
+.main-page-block a ul li {
+    margin: 10px 0;
+}

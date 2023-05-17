@@ -1,0 +1,36 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+    Product {{ id }}
+{% endblock %}
+
+{% block body %}
+    <div class="container main-block main-block-show flex-wrap">
+            <div class="m-5 product-block">
+                    <ul class="text-sm-left">
+                        <li id="product-id"><span class="font-weight-bold">#</span>{{ product.id }}</li>
+                        <li>{{ product.releaseDate|date("m/d/Y") }}</li>
+                        <li><span class="font-weight-bold">Name: </span>{{ product.name }}</li>
+                        <hr>
+                        <li><span class="font-weight-bold">Description: </span>{{ product.description }}</li>
+                        <hr>
+                        <li><span class="font-weight-bold">Customer: </span>{{ product.customer.name }}</li>
+                        <hr>
+                        <li class="font-weight-bold" value="{{ product.cost }}" id="cost"><span class="font-weight-bold">Cost: </span>{{ product.cost }} BYN</li>
+                    </ul>
+            </div>
+            <div>
+                <select name="services" id="services">
+                    {% for service in product.services %}
+                        <option value={{ service.cost }}>{{ service.name }} - {{ service.cost }} BYN</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div>
+                Total: <span id="total-value">{{ product.cost }}</span> BYN
+            </div>
+            <div>
+                <a class="go-back" href="/products">Go back</a>
+            </div>
+    </div>
+{% endblock %}

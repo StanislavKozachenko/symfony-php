@@ -1,0 +1,25 @@
+{% extends "/user/user.html.twig" %}
+{% block selected %}
+    <form action="/menu/service/delete" name="service_delete" method="post">
+        <div class="delete_customer delete_service">
+            <p>Delete service</p>
+            <div class="flex-row flex">
+                {% for service in services %}
+                    <div class="m-5 product-block edit_block">
+                        <ul class="text-sm-left">
+                            <li id="product-id"><span class="font-weight-bold">#</span>{{ service.id }}</li>
+                            <hr>
+                            <li><input class="font-weight-bold" value="{{ service.name }}"></li>
+                            <hr>
+                            <li><input class="font-weight-bold" value="{{ service.cost }}"></li>
+                            <hr>
+                            <li><input class="font-weight-bold" value="{{ service.releaseDate|date('Y/m/d') }}"></li>
+                            <li>Delete <input type="checkbox" name="checkboxes[]" value="{{ service.id }}"></li>
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="submit">Delete</button>
+        </div>
+    </form>
+{% endblock %}

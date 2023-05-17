@@ -1,0 +1,13 @@
+{% extends "/user/user.html.twig" %}
+{% block selected %}
+    <form action="/menu/customer/add" name="customer_add" method="post">
+        <div class="add_customer">
+            <p>Add customer</p>
+            <input type="text" name="name" placeholder="Name...">
+            <button type="submit">Send</button>
+        </div>
+        <div>
+            {{ status ? 'Add success!' : '' }}
+        </div>
+    </form>
+{% endblock %}

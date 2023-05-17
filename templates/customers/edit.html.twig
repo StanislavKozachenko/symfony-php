@@ -1,0 +1,20 @@
+{% extends "/user/user.html.twig" %}
+{% block selected %}
+    <form action="/menu/customer/edit" name="customer_edit" method="post">
+        <div class="edit_customer">
+            <p>Edit customer</p>
+            <div class="flex-row flex">
+                {% for customer in customers %}
+                    <div class="m-5 product-block edit_block">
+                        <ul class="text-sm-left">
+                            <li id="product-id"><span class="font-weight-bold">#</span>{{ customer.id }}</li>
+                            <hr>
+                            <li><input class="font-weight-bold" placeholder="{{ customer.name }}" name="customer-name[]" value="{{ customer.name }}"></li>
+                        </ul>
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="submit">Edit</button>
+        </div>
+    </form>
+{% endblock %}
