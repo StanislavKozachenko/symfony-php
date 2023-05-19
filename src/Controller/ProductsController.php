@@ -43,7 +43,7 @@ class ProductsController extends AbstractController
         $customers = $em->getRepository(Customer::class)->findAll();
         $services = $em->getRepository(Service::class)->findAll();
 
-        if($request->request->get('name') && $request->request->get('cost') && $request->request->get('customer') && $request->request->get('description')) {
+        if($request->request->all()) {
             $product = new Product();
             $product->setName($request->request->get('name'));
             $product->setCost($request->request->get('cost'));
@@ -51,11 +51,11 @@ class ProductsController extends AbstractController
             $product->setReleaseDate(new \DateTime());
             $product->setCustomer($em->getRepository(Customer::class)->find($request->request->get('customer')));
 
-            if($request->request->get('checkboxes')) {
+            if($request->request->all()['checkboxes']) {
                 $repository = $em->getRepository(Service::class);
                 $i = 0;
-                while ($i < count($request->request->get('checkboxes'))){
-                    $service = $repository->find($request->request->get('checkboxes')[$i]);
+                while ($i < count($request->request->all()['checkboxes'])){
+                    $service = $repository->find($request->request->all()['checkboxes'][$i]);
                     $product->addService($service);
                     $i++;
                 }
@@ -78,21 +78,21 @@ class ProductsController extends AbstractController
         $services = $em->getRepository(Service::class)->findAll();
         $products = $em->getRepository(Product::class)->findAll();
 
-        if($request->request->get('product-name') && $request->request->get('product-cost') && $request->request->get('product-customer') && $request->request->get('product-description')) {
+        if($request->request->all()) {
             $i = 0;
             foreach ($products as $product){
-                $product->setName($request->request->get('product-name')[$i]);
-                $product->setCost($request->request->get('product-cost')[$i]);
-                $product->setDescription($request->request->get('product-description')[$i]);
-                $time = DateTime::createFromFormat('d/m/Y',$request->request->get('product-release')[$i]);
+                $product->setName($request->request->all()['product-name'][$i]);
+                $product->setCost($request->request->all()['product-cost'][$i]);
+                $product->setDescription($request->request->all()['product-description'][$i]);
+                $time = DateTime::createFromFormat('d/m/Y',$request->request->all()['product-release'][$i]);
                 $product->setReleaseDate($time);
-                $product->setCustomer($em->getRepository(Customer::class)->find($request->request->get('product-customer')[$i]));
+                $product->setCustomer($em->getRepository(Customer::class)->find($request->request->all()['product-customer'][$i]));
                 $product->clearServices();
-                if($request->request->get('product-checkboxes')) {
-                    $keys = array_keys($_POST['product-checkboxes']);
+                if($request->request->all()['product-checkboxes']) {
+                    $keys = array_keys($request->request->all()['product-checkboxes']);
                         foreach ($keys as $key) {
                             if ($product->getId() == $key) {
-                                foreach ($_POST['product-checkboxes']["$key"] as $serviceId) {
+                                foreach ($request->request->all()['product-checkboxes']["$key"] as $serviceId) {
                                     $service = $em->getRepository(Service::class)->find($serviceId);
                                     $product->addService($service);
                                 }
@@ -113,10 +113,10 @@ class ProductsController extends AbstractController
     {
         $repository = $em->getRepository(Product::class);
         $products = $repository->findAll();
-        if(isset($_POST['checkboxes'])) {
+        if($request->request->all()) {
             $i = 0;
-            while ($i < count($_POST['checkboxes'])){
-                $product = $repository->find($_POST['checkboxes'][$i]);
+            while ($i < count($request->request->all()['checkboxes'])){
+                $product = $repository->find($request->request->all()['checkboxes'][$i]);
                 $em->remove($product);
                 $i++;
             }

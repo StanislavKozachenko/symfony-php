@@ -6,18 +6,19 @@ use App\Entity\Service;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Validator\Constraints\Date;
 
 class ServiceController extends AbstractController
 {
     #[Route('/menu/service/add', name: 'service/add')]
-    public function addService(EntityManagerInterface $em): \Symfony\Component\HttpFoundation\Response
+    public function addService(EntityManagerInterface $em, Request $request): \Symfony\Component\HttpFoundation\Response
     {
-        if(isset($_POST['name']) && isset($_POST['cost'])) {
+        if($request->request->all()) {
             $service = new Service();
-            $service->setName($_POST['name']);
-            $service->setCost($_POST['cost']);
+            $service->setName($request->request->get('name'));
+            $service->setCost($request->request->get('cost'));
             $service->setReleaseDate(new \DateTime());
             $em->persist($service);
             $em->flush();
@@ -30,16 +31,16 @@ class ServiceController extends AbstractController
     }
 
     #[Route('/menu/service/edit', name: 'service/edit')]
-    public function editService(EntityManagerInterface $em): \Symfony\Component\HttpFoundation\Response
+    public function editService(EntityManagerInterface $em, Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $repository = $em->getRepository(Service::class);
         $services = $repository->findAll();
-        if(isset($_POST['service-name']) && isset($_POST['service-cost']) && isset($_POST['service-release'])) {
+        if($request->request->all()) {
             $i = 0;
             foreach ($services as $service){
-                $service->setName($_POST['service-name'][$i]);
-                $service->setCost($_POST['service-cost'][$i]);
-                $time = DateTime::createFromFormat('d/m/Y', $_POST['service-release'][$i]);
+                $service->setName($request->request->all()['service-name'][$i]);
+                $service->setCost($request->request->all()['service-cost'][$i]);
+                $time = DateTime::createFromFormat('d/m/Y', $request->request->all()['service-release'][$i]);
                 $service->setReleaseDate($time);
                 $i++;
             }
@@ -51,14 +52,14 @@ class ServiceController extends AbstractController
     }
 
     #[Route('/menu/service/delete', name: 'service/delete')]
-    public function deleteService(EntityManagerInterface $em): \Symfony\Component\HttpFoundation\Response
+    public function deleteService(EntityManagerInterface $em, Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $repository = $em->getRepository(Service::class);
         $services = $repository->findAll();
-        if(isset($_POST['checkboxes'])) {
+        if($request->request->all()) {
             $i = 0;
-            while ($i < count($_POST['checkboxes'])){
-                $service = $repository->find($_POST['checkboxes'][$i]);
+            while ($i < count($request->request->all()['checkboxes'])){
+                $service = $repository->find($request->request->all()['checkboxes'][$i]);
                 $em->remove($service);
                 $i++;
             }

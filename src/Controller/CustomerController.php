@@ -32,10 +32,10 @@ class CustomerController extends AbstractController
     {
         $repository = $em->getRepository(Customer::class);
         $customers = $repository->findAll();
-        if($request->request->get('customer-name') !== null) {
+        if($request->request->all()) {
             $i = 0;
             foreach ($customers as $customer){
-                $customer->setName($request->request->get('customer-name')[$i]);
+                $customer->setName($request->request->all()['customer-name'][$i]);
                 $i++;
             }
             $em->flush();
@@ -50,10 +50,10 @@ class CustomerController extends AbstractController
     {
         $repository = $em->getRepository(Customer::class);
         $customers = $repository->findAll();
-        if($request->request->get('checkboxes') !== null) {
+        if($request->request->all()) {
             $i = 0;
-            while ($i < $request->request->get('checkboxes')){
-                $customer = $repository->find($request->request->get('checkboxes')[$i]);
+            while ($i < count($request->request->all()['checkboxes'])){
+                $customer = $repository->find($request->request->all()['checkboxes'][$i]);
                 $em->remove($customer);
                 $i++;
             }
