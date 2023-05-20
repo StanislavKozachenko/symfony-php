@@ -1,0 +1,16 @@
+<div class="sort-content">
+    <form action="/products" method="post">
+        <div>
+            <select name="sortType" id="sort-type">
+                <option selected value="ASC">ASC</option>
+                <option value="DESC">DESC</option>
+            </select>
+            <select name="sortItemName" id="sort-item-name">
+                <option value="name">Name</option>
+                <option selected value="cost">Cost</option>
+                <option value="releaseDate">Release date</option>
+            </select>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</div>

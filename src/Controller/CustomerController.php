@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Customer;
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Paginate;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -30,8 +31,10 @@ class CustomerController extends AbstractController
     #[Route('/menu/customer/edit', name: 'customer/edit')]
     public function editCustomer(EntityManagerInterface $em, Request $request): \Symfony\Component\HttpFoundation\Response
     {
-        $repository = $em->getRepository(Customer::class);
-        $customers = $repository->findAll();
+        $query = $em->getRepository(Customer::class)->createQueryBuilder('d');
+        $pagination = new Paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+        $customers = $pagination->paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+
         if($request->request->all()) {
             $i = 0;
             foreach ($customers as $customer){
@@ -41,7 +44,8 @@ class CustomerController extends AbstractController
             $em->flush();
         }
         return $this->render('customers/edit.html.twig', array(
-            "customers"=>$customers
+            "customers"=>$customers,
+            'lastPage' => $pagination->lastPage($customers)
         ));
     }
 
@@ -49,7 +53,10 @@ class CustomerController extends AbstractController
     public function deleteCustomer(EntityManagerInterface $em, Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $repository = $em->getRepository(Customer::class);
-        $customers = $repository->findAll();
+        $query = $em->getRepository(Customer::class)->createQueryBuilder('d');
+        $pagination = new Paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+        $customers = $pagination->paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+
         if($request->request->all()) {
             $i = 0;
             while ($i < count($request->request->all()['checkboxes'])){
@@ -60,7 +67,8 @@ class CustomerController extends AbstractController
             $em->flush();
         }
         return $this->render('customers/delete.html.twig', array(
-            "customers"=>$customers
+            "customers"=>$customers,
+            'lastPage' => $pagination->lastPage($customers)
         ));
     }
 }

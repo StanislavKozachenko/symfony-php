@@ -1,0 +1,12 @@
+<div class="sort-content filter-content">
+    <form action="/products" method="post">
+        <div>
+            <select name="filterType" id="product-customer">
+                {% for customer in customers %}
+                    <option selected value="{{ customer.id }}">{{ customer.id }} | {{ customer.name }}
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+</div>

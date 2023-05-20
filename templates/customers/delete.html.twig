@@ -1,6 +1,7 @@
 {% extends "/user/user.html.twig" %}
+{% set _currentPage = app.request.query.get('p') ?: 1 %}
 {% block selected %}
-    <form action="/menu/customer/delete" name="customer_delete" method="post">
+    <form action="/menu/customer/delete?p={{ _currentPage }}" name="customer_delete" method="post">
         <div class="delete_customer">
             <p>Delete customer</p>
             <div class="flex-row flex">
@@ -14,6 +15,9 @@
                         </ul>
                     </div>
                 {% endfor %}
+            </div>
+            <div class="container pagination">
+                {% include "paginate/pagination.html.twig" %}
             </div>
             <button type="submit">Delete</button>
         </div>

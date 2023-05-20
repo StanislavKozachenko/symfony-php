@@ -7,6 +7,8 @@ use App\Entity\Product;
 use App\Entity\Service;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Paginate;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,13 +17,30 @@ use Symfony\Component\Routing\Annotation\Route;
 class ProductsController extends AbstractController
 {
     #[Route('/products', name: 'products')]
-    public function index(EntityManagerInterface $em): Response
+    public function index(EntityManagerInterface $em, Request $request): Response
     {
-        $repository = $em->getRepository(Product::class);
-        $products = $repository->findAll();
+        $query = $em->getRepository(Product::class)->createQueryBuilder('d');
+
+        if($request->request->get('sortType')) {
+            $query = \Sort::sorting(
+                $request->request->get('sortType'),
+                $request->request->get('sortItemName'),
+                $query
+            );
+        }
+        if($request->request->get('filterType')) {
+            $query = \Filter::filtering(
+                $request->request->get('filterType'),
+                $query
+            );
+        }
+        $pagination = new Paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+        $products = $pagination->paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
 
         return $this->render('index.html.twig', array(
-            "products"=>$products
+            "products"=>$products,
+            "customers"=>$em->getRepository(Customer::class)->findAll(),
+            'lastPage' => $pagination->lastPage($products)
         ));
     }
 
@@ -76,7 +95,10 @@ class ProductsController extends AbstractController
     {
         $customers = $em->getRepository(Customer::class)->findAll();
         $services = $em->getRepository(Service::class)->findAll();
-        $products = $em->getRepository(Product::class)->findAll();
+
+        $query = $em->getRepository(Product::class)->createQueryBuilder('d');
+        $pagination = new Paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+        $products = $pagination->paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
 
         if($request->request->all()) {
             $i = 0;
@@ -102,17 +124,20 @@ class ProductsController extends AbstractController
                 $i++;
             }
             $em->flush();
-            return $this->render('products/edit.html.twig', array("status"=>true, "customers"=>$customers, "services"=>$services, "products"=>$products));
+            return $this->render('products/edit.html.twig', array("status"=>true, "customers"=>$customers, "services"=>$services, "products"=>$products, 'lastPage' => $pagination->lastPage($products)));
         }
         else {
-            return $this->render('products/edit.html.twig', array("status"=>false, "customers"=>$customers, "services"=>$services, "products"=>$products));
+            return $this->render('products/edit.html.twig', array("status"=>false, "customers"=>$customers, "services"=>$services, "products"=>$products, 'lastPage' => $pagination->lastPage($products)));
         }
     }
     #[Route('/menu/product/delete', name: 'product/delete')]
     public function deleteProduct(EntityManagerInterface $em, Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $repository = $em->getRepository(Product::class);
-        $products = $repository->findAll();
+        $query = $em->getRepository(Product::class)->createQueryBuilder('d');
+        $pagination = new Paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+        $products = $pagination->paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+
         if($request->request->all()) {
             $i = 0;
             while ($i < count($request->request->all()['checkboxes'])){
@@ -123,7 +148,8 @@ class ProductsController extends AbstractController
             $em->flush();
         }
         return $this->render('products/delete.html.twig', array(
-            "products"=>$products
+            "products"=>$products,
+            'lastPage' => $pagination->lastPage($products)
         ));
     }
 }

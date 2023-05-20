@@ -5,6 +5,12 @@
 {% endblock %}
 
 {% block body %}
+    <div class="container main-block">
+        {% include "sort/sort.html.twig" %}
+    </div>
+    <div class="container main-block">
+        {% include "filter/filter.html.twig" %}
+    </div>
     <div class="container main-block flex-wrap">
        {% for product in products %}
            <div class="m-5 product-block main-page-block">
@@ -24,4 +30,8 @@
            </div>
         {% endfor %}
     </div>
+    <div class="container pagination">
+        {% include "paginate/pagination.html.twig" %}
+    </div>
+
 {% endblock %}

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Service;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Paginate;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -33,8 +34,10 @@ class ServiceController extends AbstractController
     #[Route('/menu/service/edit', name: 'service/edit')]
     public function editService(EntityManagerInterface $em, Request $request): \Symfony\Component\HttpFoundation\Response
     {
-        $repository = $em->getRepository(Service::class);
-        $services = $repository->findAll();
+        $query = $em->getRepository(Service::class)->createQueryBuilder('d');
+        $pagination = new Paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+        $services = $pagination->paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+
         if($request->request->all()) {
             $i = 0;
             foreach ($services as $service){
@@ -47,7 +50,8 @@ class ServiceController extends AbstractController
             $em->flush();
         }
         return $this->render('services/edit.html.twig', array(
-            "services"=>$services
+            "services"=>$services,
+            'lastPage' => $pagination->lastPage($services)
         ));
     }
 
@@ -55,7 +59,10 @@ class ServiceController extends AbstractController
     public function deleteService(EntityManagerInterface $em, Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $repository = $em->getRepository(Service::class);
-        $services = $repository->findAll();
+        $query = $em->getRepository(Service::class)->createQueryBuilder('d');
+        $pagination = new Paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+        $services = $pagination->paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+
         if($request->request->all()) {
             $i = 0;
             while ($i < count($request->request->all()['checkboxes'])){
@@ -66,7 +73,8 @@ class ServiceController extends AbstractController
             $em->flush();
         }
         return $this->render('services/delete.html.twig', array(
-            "services"=>$services
+            "services"=>$services,
+            'lastPage' => $pagination->lastPage($services)
         ));
     }
 }
