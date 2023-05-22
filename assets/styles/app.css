@@ -187,3 +187,16 @@ form[name="registration_form"] button:hover, form[name="auth_form"] button:hover
     color: #fff;
     transition: .2s;
 }
+.product-setting-bar {
+    display: flex;
+    justify-content: space-around;
+}
+.product-setting-bar > a {
+    text-decoration: underline;
+}
+select[id='services']{
+    border: 1px solid #000;
+}
+select[id='services'] option {
+    border-bottom: 1px solid #c0c0c0;
+}

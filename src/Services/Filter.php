@@ -8,6 +8,5 @@ class Filter extends \Doctrine\ORM\QueryBuilder
         $criteria = Criteria::create()
             ->andWhere(Criteria::expr()->eq('customer', $filterType));
         return $query->addCriteria($criteria);
-
     }
 }

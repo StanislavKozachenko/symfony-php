@@ -20,15 +20,25 @@ class ProductsController extends AbstractController
     public function index(EntityManagerInterface $em, Request $request): Response
     {
         $query = $em->getRepository(Product::class)->createQueryBuilder('d');
-
-        if($request->request->get('sortType')) {
+        if($request->query->get('sortType')) {
+            $query = \Sort::sorting(
+                $request->query->get('sortType'),
+                $request->query->get('sortItemName'),
+                $query
+            );
+        } else if ($request->request->get('sortType')){
             $query = \Sort::sorting(
                 $request->request->get('sortType'),
                 $request->request->get('sortItemName'),
                 $query
             );
         }
-        if($request->request->get('filterType')) {
+        if($request->query->get('filterType')) {
+            $query = \Filter::filtering(
+                $request->query->get('filterType'),
+                $query
+            );
+        } else if ($request->request->get('filterType')){
             $query = \Filter::filtering(
                 $request->request->get('filterType'),
                 $query

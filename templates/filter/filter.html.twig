@@ -3,7 +3,7 @@
         <div>
             <select name="filterType" id="product-customer">
                 {% for customer in customers %}
-                    <option selected value="{{ customer.id }}">{{ customer.id }} | {{ customer.name }}
+                    <option value="{{ customer.id }}">{{ customer.name }}
                 {% endfor %}
             </select>
         </div>

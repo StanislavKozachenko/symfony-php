@@ -18,9 +18,17 @@
                         <hr>
                         <li class="font-weight-bold" value="{{ product.cost }}" id="cost"><span class="font-weight-bold">Cost: </span>{{ product.cost }} BYN</li>
                     </ul>
+                    {#                {% if app.user is not null  %}#}
+                    {#                    {% if app.user.roles[0] == 'ROLE_ADMIN' %}#}
+                    {#                        <li class="product-setting-bar">#}
+                    {#                            <a href="/products">Edit</a>#}
+                    {#                            <a href="/products">Delete</a>#}
+                    {#                        </li>#}
+                    {#                    {% endif %}#}
+                    {#                {% endif %}#}
             </div>
             <div>
-                <select name="services" id="services">
+                <select name="services" id="services" multiple>
                     {% for service in product.services %}
                         <option value={{ service.cost }}>{{ service.name }} - {{ service.cost }} BYN</option>
                     {% endfor %}

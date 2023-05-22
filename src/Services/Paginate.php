@@ -21,6 +21,7 @@ class Paginate extends \Doctrine\ORM\Tools\Pagination\Paginator
      */
     public function paginate(QueryBuilder|Query $query, Request $request, int $limit): Paginator
     {
+//        dd($request);
         $currentPage = $request->query->getInt('p') ?: 1;
         $paginator = new Paginator($query);
         $paginator
