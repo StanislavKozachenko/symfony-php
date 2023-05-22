@@ -11,10 +11,10 @@ textarea {
     width: 100%;
 }
 .product-block li textarea {
-    min-height: 100px;
+    min-height: 50px;
 }
 .main-block {
-    margin-top: 40px;
+    margin-top: 30px;
     display: flex;
     justify-content: center;
 }
@@ -34,7 +34,7 @@ textarea {
     transform: translateY(2px);
 }
 .product-block > ul li {
-    padding: 10px 0;
+    padding: 5px 0;
 }
 #product-id {
     padding-top: 0;
@@ -199,4 +199,17 @@ select[id='services']{
 }
 select[id='services'] option {
     border-bottom: 1px solid #c0c0c0;
+}
+.items-per-page {
+    display: flex;
+    flex-direction: row;
+}
+.items-per-page li {
+    text-decoration: underline;
+    padding: 3px;
+}
+.items-per-page-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }

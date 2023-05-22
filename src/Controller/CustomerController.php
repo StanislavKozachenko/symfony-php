@@ -32,8 +32,8 @@ class CustomerController extends AbstractController
     public function editCustomer(EntityManagerInterface $em, Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $query = $em->getRepository(Customer::class)->createQueryBuilder('d');
-        $pagination = new Paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
-        $customers = $pagination->paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+        $pagination = new Paginate($query, $request);
+        $customers = $pagination->paginate($query, $request);
 
         if($request->request->all()) {
             $i = 0;

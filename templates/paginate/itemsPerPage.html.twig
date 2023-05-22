@@ -1,0 +1,22 @@
+{% set _currentRoute = app.request.attributes.get('_route') %}
+{% set _currentParams = app.request.query.all %}
+{% set _currentSortParams = app.request.request.all %}
+<div class="items-per-page-wrapper">
+    <p>
+        Per page:
+    </p>
+    <ul class="items-per-page">
+        <a href="{{ path(_currentRoute, _currentParams|merge({p: 1, per: 1})|merge(_currentSortParams)) }}">
+            <li>1</li>
+        </a>
+        <a href="{{ path(_currentRoute, _currentParams|merge({p: 1, per: 2})|merge(_currentSortParams)) }}">
+            <li>2</li>
+        </a>
+        <a href="{{ path(_currentRoute, _currentParams|merge({p: 1, per: 3})|merge(_currentSortParams)) }}">
+            <li>3</li>
+        </a>
+        <a href="{{ path(_currentRoute, _currentParams|merge({p: 1, per: 4})|merge(_currentSortParams)) }}">
+            <li>4</li>
+        </a>
+    </ul>
+</div>
