@@ -33,13 +33,14 @@ class ProductsController extends AbstractController
                 $query
             );
         }
-        if($request->query->get('filterType') && $request->query->get('name')){
+        if($request->query->get('filterType') !== null && $request->query->get('name')){
             $query = \Filter::filtering(
                 $query,
                 $request->query->get('filterType'),
                 $request->query->get('name'),
             );
-        } else if($request->query->get('filterType')){
+        }
+        else if($request->query->get('filterType') !== null){
             $query = \Filter::filtering(
                 $query,
                 $request->query->get('filterType'),
@@ -47,16 +48,18 @@ class ProductsController extends AbstractController
         } else if($request->query->get('name')){
             $query = \Filter::filtering(
                 $query,
+                "",
                 $request->query->get('name'),
             );
         }
-        if($request->request->get('filterType') && $request->request->get('name')){
+        if($request->request->get('filterType') !== null && $request->request->get('name')){
             $query = \Filter::filtering(
                 $query,
                 $request->request->get('filterType'),
                 $request->request->get('name'),
             );
-        } else if($request->request->get('filterType')){
+        }
+        else if($request->request->get('filterType') !== null){
             $query = \Filter::filtering(
                 $query,
                 $request->request->get('filterType'),
@@ -64,6 +67,7 @@ class ProductsController extends AbstractController
         } else if($request->request->get('name')) {
             $query = \Filter::filtering(
                 $query,
+                "",
                 $request->request->get('name'),
             );
         }
