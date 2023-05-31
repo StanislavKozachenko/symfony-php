@@ -7,7 +7,6 @@ use App\Entity\Product;
 use App\Entity\Service;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Knp\Component\Pager\Pagination\PaginationInterface;
 use Paginate;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -71,8 +70,8 @@ class ProductsController extends AbstractController
                 $request->request->get('name'),
             );
         }
-        $pagination = new Paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
-        $products = $pagination->paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+        $pagination = new Paginate($query, $request);
+        $products = $pagination->paginate($query, $request);
 
         return $this->render('index.html.twig', array(
             "products"=>$products,
@@ -188,5 +187,11 @@ class ProductsController extends AbstractController
             "products"=>$products,
             'lastPage' => $pagination->lastPage($products)
         ));
+    }
+    #[Route('/menu/product/save', name: 'product/save')]
+    public function save(EntityManagerInterface $em): \Symfony\Component\HttpFoundation\RedirectResponse
+    {
+        \S3::init($em->getRepository(\App\Entity\Product::class)->findAll());
+        return $this->redirectToRoute('customer/add');
     }
 }
