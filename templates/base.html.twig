@@ -20,6 +20,7 @@
                 <nav>
                     <a href="/{{ app.user ? 'menu' : 'register' }}">{{ app.user ?  app.user.email : 'Sign up' }}</a>
                     <a href="/{{ app.user ? 'logout' : 'login' }}">{{ app.user ? 'Logout' : 'Login' }}</a>
+                    <a href="/{{ app.user ? 'logout' : 'connect/google' }}">{{ app.user ? '' : 'Google auth' }}</a>
                 </nav>
             </div>
         </header>
