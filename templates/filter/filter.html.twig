@@ -2,7 +2,7 @@
     <form action="/products" method="post">
         <div>
             <select name="filterType" id="product-customer">
-                <option disabled selected value="0">Customer:</option>
+                <option disabled selected value="0">Customer</option>
                 {% for customer in customers %}
                     <option value="{{ customer.id }}">{{ customer.name }}
                 {% endfor %}
