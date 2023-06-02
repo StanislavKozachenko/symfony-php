@@ -3,7 +3,10 @@
 @tailwind components;
 
 @tailwind utilities;
-
+::selection {
+    color: #fff;
+    background: rgb(0 0 0 / 80%);
+}
 ul {
     list-style: none;
 }
@@ -13,6 +16,9 @@ textarea {
 select {
     border: 1px solid white;
     outline: none;
+}
+hr {
+    border-bottom: 1px solid rgb(0 0 0 / 60%);
 }
 .product-block li textarea {
     min-height: 50px;
@@ -48,7 +54,7 @@ select {
 #product-id {
     padding-top: 0;
     font-size: 40px;
-    color: rgba(187, 187, 187, 0.8);
+    color: rgb(0 0 0 / 80%);
 }
 #product-id li:nth-child(2) {
     font-size: 14px;
@@ -72,7 +78,7 @@ select[name="services"]{
     text-decoration: underline;
 }
 header {
-    background: rgb(12 12 12 / 93%);
+    background: rgb(0 0 0 / 80%);
     padding: 15px 0;
 }
 header .container {
@@ -206,11 +212,8 @@ form[name="registration_form"] button:hover, form[name="auth_form"] button:hover
 .product-setting-bar > a {
     text-decoration: underline;
 }
-select[id='services']{
-    border: 1px solid #000;
-}
 select[id='services'] option {
-    border-bottom: 1px solid #c0c0c0;
+    border-bottom: 1px solid rgb(0 0 0 / 80%);
 }
 .items-per-page {
     display: flex;
@@ -225,7 +228,7 @@ select[id='services'] option {
     align-items: center;
     justify-content: center;
 }
-input[name="name"]{
+.filter-content input[name="name"] {
     width: 100px;
     border-bottom: 1px solid #000;
     padding: 5px;

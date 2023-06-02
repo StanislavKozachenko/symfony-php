@@ -1,5 +1,7 @@
 <?php
 
+namespace Helpers\Sort;
+
 use Doctrine\Common\Collections\Criteria;
 
 class Sort extends \Doctrine\ORM\QueryBuilder

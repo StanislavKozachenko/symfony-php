@@ -1,5 +1,7 @@
 <?php
 
+namespace Helpers\Filter;
+
 use Doctrine\Common\Collections\Criteria;
 
 class Filter extends \Doctrine\ORM\QueryBuilder

@@ -7,7 +7,10 @@ use App\Entity\Product;
 use App\Entity\Service;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Paginate;
+use Helpers\Filter\Filter;
+use Helpers\Paginate\Paginate;
+use Helpers\S3\S3\S3;
+use Helpers\Sort\Sort;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,57 +22,33 @@ class ProductsController extends AbstractController
     public function index(EntityManagerInterface $em, Request $request): Response
     {
         $query = $em->getRepository(Product::class)->createQueryBuilder('d');
-        if($request->query->get('sortType')) {
-            $query = \Sort::sorting(
-                $request->query->get('sortType'),
-                $request->query->get('sortItemName'),
-                $query
-            );
-        } else if ($request->request->get('sortType')){
-            $query = \Sort::sorting(
-                $request->request->get('sortType'),
-                $request->request->get('sortItemName'),
+        if($request->get('sortType')) {
+            $query = Sort::sorting(
+                $request->get('sortType'),
+                $request->get('sortItemName'),
                 $query
             );
         }
-        if($request->query->get('filterType') !== null && $request->query->get('name')){
-            $query = \Filter::filtering(
+        if($request->get('filterType') !== null && $request->get('name')){
+            $query = Filter::filtering(
                 $query,
-                $request->query->get('filterType'),
-                $request->query->get('name'),
+                $request->get('filterType'),
+                $request->get('name'),
             );
         }
-        else if($request->query->get('filterType') !== null){
-            $query = \Filter::filtering(
+        else if($request->get('filterType') !== null){
+            $query = Filter::filtering(
                 $query,
-                $request->query->get('filterType'),
+                $request->get('filterType'),
             );
-        } else if($request->query->get('name')){
-            $query = \Filter::filtering(
+        } else if($request->get('name')){
+            $query = Filter::filtering(
                 $query,
                 "",
                 $request->query->get('name'),
             );
         }
-        if($request->request->get('filterType') !== null && $request->request->get('name')){
-            $query = \Filter::filtering(
-                $query,
-                $request->request->get('filterType'),
-                $request->request->get('name'),
-            );
-        }
-        else if($request->request->get('filterType') !== null){
-            $query = \Filter::filtering(
-                $query,
-                $request->request->get('filterType'),
-            );
-        } else if($request->request->get('name')) {
-            $query = \Filter::filtering(
-                $query,
-                "",
-                $request->request->get('name'),
-            );
-        }
+
         $pagination = new Paginate($query, $request);
         $products = $pagination->paginate($query, $request);
 
@@ -191,7 +170,7 @@ class ProductsController extends AbstractController
     #[Route('/menu/product/save', name: 'product/save')]
     public function save(EntityManagerInterface $em): \Symfony\Component\HttpFoundation\RedirectResponse
     {
-        \S3::init($em->getRepository(\App\Entity\Product::class)->findAll());
+        S3::init($em->getRepository(\App\Entity\Product::class)->findAll());
         return $this->redirectToRoute('customer/add');
     }
 }

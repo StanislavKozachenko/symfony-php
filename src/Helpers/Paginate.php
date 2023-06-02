@@ -1,5 +1,7 @@
 <?php
 
+namespace Helpers\Paginate;
+
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
