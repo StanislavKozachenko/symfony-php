@@ -34,6 +34,7 @@ hr {
     justify-content: space-evenly;
 }
 .product-block {
+    min-height: 350px;
     font-family: "Roboto Light", sans-serif;
     padding: 15px 10px;
     width: 300px;
@@ -244,4 +245,14 @@ nav a:first-child {
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+}
+.update-rates-button a {
+    padding: 5px;
+    border-bottom: 1px solid #000;
+    transition: .2s;
+    cursor: pointer;
+}
+.update-rates-button a:hover {
+    background-color: #000;
+    color: #fff;
 }

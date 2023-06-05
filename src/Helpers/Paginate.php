@@ -5,27 +5,20 @@ namespace Helpers\Paginate;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class Paginate extends \Doctrine\ORM\Tools\Pagination\Paginator
 {
-    public static int $ITEMS_PER_PAGE = 2;
-
-    public function setItemsPerPage(int $items){
-        self::$ITEMS_PER_PAGE = $items;
-    }
-
     /**
      * @param QueryBuilder|Query $query
      * @param Request $request
-     * @param int $limit
      * @return Paginator
      */
     public function paginate(QueryBuilder|Query $query, Request $request): Paginator
     {
         $currentPage = $request->query->getInt('p') ?: 1;
         $limit = $request->query->getInt('per') ?: 3;
-        self::setItemsPerPage($limit);
         $paginator = new Paginator($query);
         $paginator
             ->getQuery()

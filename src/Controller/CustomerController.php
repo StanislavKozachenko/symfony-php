@@ -3,9 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\Customer;
-use App\Repository\CustomerRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Paginate;
+use Helpers\Paginate\Paginate;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -54,8 +53,8 @@ class CustomerController extends AbstractController
     {
         $repository = $em->getRepository(Customer::class);
         $query = $em->getRepository(Customer::class)->createQueryBuilder('d');
-        $pagination = new Paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
-        $customers = $pagination->paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+        $pagination = new Paginate($query, $request);
+        $customers = $pagination->paginate($query, $request);
 
         if($request->request->all()) {
             $i = 0;

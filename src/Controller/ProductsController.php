@@ -3,10 +3,12 @@
 namespace App\Controller;
 
 use App\Entity\Customer;
+use App\Entity\ExchangeRate;
 use App\Entity\Product;
 use App\Entity\Service;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query\QueryException;
 use Helpers\Filter\Filter;
 use Helpers\Paginate\Paginate;
 use Helpers\S3\S3\S3;
@@ -18,9 +20,20 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ProductsController extends AbstractController
 {
+    /**
+     * @throws QueryException
+     */
     #[Route('/products', name: 'products')]
     public function index(EntityManagerInterface $em, Request $request): Response
     {
+        $rates = $em->getRepository(ExchangeRate::class)->findAll();
+
+        // ****** Life exchange rate reload.
+        //
+        //        if(!$request->get('exchange')){
+        //            return $this->redirectToRoute('app_exchange_rate');
+        //        }
+
         $query = $em->getRepository(Product::class)->createQueryBuilder('d');
         if($request->get('sortType')) {
             $query = Sort::sorting(
@@ -29,23 +42,12 @@ class ProductsController extends AbstractController
                 $query
             );
         }
-        if($request->get('filterType') !== null && $request->get('name')){
+
+        if($request->get('filterType') || $request->get('name')){
             $query = Filter::filtering(
                 $query,
-                $request->get('filterType'),
-                $request->get('name'),
-            );
-        }
-        else if($request->get('filterType') !== null){
-            $query = Filter::filtering(
-                $query,
-                $request->get('filterType'),
-            );
-        } else if($request->get('name')){
-            $query = Filter::filtering(
-                $query,
-                "",
-                $request->query->get('name'),
+                $request->get('filterType', ''),
+                $request->get('name', ''),
             );
         }
 
@@ -55,19 +57,26 @@ class ProductsController extends AbstractController
         return $this->render('index.html.twig', array(
             "products"=>$products,
             "customers"=>$em->getRepository(Customer::class)->findAll(),
-            'lastPage' => $pagination->lastPage($products)
+            "lastPage" => $pagination->lastPage($products),
+            "rates"=>$rates
         ));
     }
 
     #[Route('/products/{id}', name: 'product')]
-    public function show(EntityManagerInterface $em, $id): Response
+    public function show(EntityManagerInterface $em, $id, Request $request): Response
     {
+        $rates = $em->getRepository(ExchangeRate::class)->findAll();
+        if(!$request->get('exchange')){
+            return $this->redirectToRoute('app_exchange_rate', array('id'=>$id));
+        }
+        $id = $request->get('id');
         $repository = $em->getRepository(Product::class);
         $product = $repository->find($id);
 
         return $this->render('show.html.twig', array(
             "product"=>$product,
-            "id"=>$id
+            "id"=>$id,
+            "rates"=>$rates
         ));
     }
 
@@ -112,8 +121,8 @@ class ProductsController extends AbstractController
         $services = $em->getRepository(Service::class)->findAll();
 
         $query = $em->getRepository(Product::class)->createQueryBuilder('d');
-        $pagination = new Paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
-        $products = $pagination->paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+        $pagination = new Paginate($query, $request);
+        $products = $pagination->paginate($query, $request);
 
         if($request->request->all()) {
             $i = 0;
@@ -150,8 +159,8 @@ class ProductsController extends AbstractController
     {
         $repository = $em->getRepository(Product::class);
         $query = $em->getRepository(Product::class)->createQueryBuilder('d');
-        $pagination = new Paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
-        $products = $pagination->paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+        $pagination = new Paginate($query, $request);
+        $products = $pagination->paginate($query, $request);
 
         if($request->request->all()) {
             $i = 0;

@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Service;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Paginate;
+use Helpers\Paginate\Paginate;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -35,8 +35,8 @@ class ServiceController extends AbstractController
     public function editService(EntityManagerInterface $em, Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $query = $em->getRepository(Service::class)->createQueryBuilder('d');
-        $pagination = new Paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
-        $services = $pagination->paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+        $pagination = new Paginate($query, $request);
+        $services = $pagination->paginate($query, $request);
 
         if($request->request->all()) {
             $i = 0;
@@ -60,8 +60,8 @@ class ServiceController extends AbstractController
     {
         $repository = $em->getRepository(Service::class);
         $query = $em->getRepository(Service::class)->createQueryBuilder('d');
-        $pagination = new Paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
-        $services = $pagination->paginate($query, $request, Paginate::$ITEMS_PER_PAGE);
+        $pagination = new Paginate($query, $request);
+        $services = $pagination->paginate($query, $request);
 
         if($request->request->all()) {
             $i = 0;

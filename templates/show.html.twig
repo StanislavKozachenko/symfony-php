@@ -16,30 +16,30 @@
                         <hr>
                         <li><span class="font-weight-bold">Customer: </span>{{ product.customer.name }}</li>
                         <hr>
-                        <li class="font-weight-bold" value="{{ product.cost }}" id="cost"><span class="font-weight-bold">Cost: </span>{{ product.cost }} BYN</li>
+                        <li class="font-weight-bold">
+                            <select name="rates" id="rates" class="rates-changer">
+                                <option selected class="font-weight-bold" value="{{ product.cost }}-1-byn">{{ product.cost }} BYN</option>
+                                {% for rate in rates %}
+                                    <option value="{{ (product.cost / rate.usd)|number_format(2,'.', '') }}-{{ rate.usd }}-usd" class="font-weight-bold">{{ (product.cost / rate.usd)|number_format(2,',', '') }} USD</option>
+                                    <option value="{{ (product.cost / rate.eur)|number_format(2,'.', '') }}-{{ rate.eur }}-eur" class="font-weight-bold">{{ (product.cost / rate.eur)|number_format(2,',', '') }} EUR</option>
+                                    <option value="{{ (product.cost / rate.rub)|number_format(2,'.', '') }}-{{ rate.rub }}-rub" class="font-weight-bold">{{ (product.cost / rate.rub)|number_format(2,',', '') }} RUB</option>
+                                {% endfor %}
+                            </select>
+                        </li>
                     </ul>
             </div>
             <div>
                 <select name="services" id="services" multiple>
                     {% for service in product.services %}
-                        <option value={{ service.cost }}>{{ service.name }} - {{ service.cost }} BYN</option>
+                        <option class="service-item" value={{ service.cost }}-{{ service.name }}>{{ service.name }} - {{ service.cost }} BYN</option>
                     {% endfor %}
                 </select>
             </div>
             <div>
-                Total: <span id="total-value">{{ product.cost }}</span> BYN
+                Total: <span id="total-value">{{ product.cost }} BYN</span>
             </div>
             <div>
                 <a class="go-back" href="/products">Go back</a>
             </div>
     </div>
 {% endblock %}
-
-                    {#                {% if app.user is not null  %}#}
-                    {#                    {% if app.user.roles[0] == 'ROLE_ADMIN' %}#}
-                    {#                        <li class="product-setting-bar">#}
-                    {#                            <a href="/products">Edit</a>#}
-                    {#                            <a href="/products">Delete</a>#}
-                    {#                        </li>#}
-                    {#                    {% endif %}#}
-                    {#                {% endif %}#}

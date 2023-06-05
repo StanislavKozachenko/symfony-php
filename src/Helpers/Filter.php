@@ -3,20 +3,22 @@
 namespace Helpers\Filter;
 
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 
 class Filter extends \Doctrine\ORM\QueryBuilder
 {
-    public static function filtering($query, $filterType = "", $name = ""){
-        if($name == "") {
-            $criteria = Criteria::create()
-                ->andWhere(Criteria::expr()->eq('customer', $filterType));
-        } else if($filterType == ""){
-            $criteria = Criteria::create()
-                ->andWhere(Criteria::expr()->eq('name', $name));
-        } else {
-            $criteria = Criteria::create()
-                ->andWhere(Criteria::expr()->eq('customer', $filterType))
-                ->andWhere(Criteria::expr()->eq('name', $name));
+    /**
+     * @throws Query\QueryException
+     */
+    public static function filtering(QueryBuilder|Query $query, string $customer = "", string $name = ""): QueryBuilder
+    {
+        $criteria = Criteria::create();
+        if ("" !== $name) {
+            $criteria->andWhere(Criteria::expr()->eq('name', $name));
+        }
+        if ("" !== $customer) {
+            $criteria->andWhere(Criteria::expr()->eq('customer', $customer));
         }
         return $query->addCriteria($criteria);
     }
