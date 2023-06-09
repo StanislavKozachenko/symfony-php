@@ -11,7 +11,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\QueryException;
 use Helpers\Filter\Filter;
 use Helpers\Paginate\Paginate;
-use Helpers\S3\S3\S3;
+use Helpers\S3\S3\AwsServices;
 use Helpers\Sort\Sort;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -179,7 +179,7 @@ class ProductsController extends AbstractController
     #[Route('/menu/product/save', name: 'product/save')]
     public function save(EntityManagerInterface $em): \Symfony\Component\HttpFoundation\RedirectResponse
     {
-        S3::init($em->getRepository(\App\Entity\Product::class)->findAll());
-        return $this->redirectToRoute('customer/add');
+        AwsServices::init($em->getRepository(\App\Entity\Product::class)->findAll());
+        return $this->redirectToRoute('menu');
     }
 }

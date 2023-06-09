@@ -6,7 +6,7 @@ use Aws\Exception\AwsException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class S3
+class AwsServices
 {
     public static function convertToCSV($array){
         $fs = fopen('products.csv', 'w');
@@ -32,13 +32,13 @@ class S3
     {
         self::convertToCSV($body);
 
-        $bucketName = 'symf-bucket';
+        $bucketName = 'product-bucket';
 
         $s3 = new \Aws\Sdk([
             'version' => 'latest',
             'region' => 'us-east-1',
             'use_path_style_endpoint' => true,
-            'endpoint'=>'http://s3.localhost.localstack.cloud:4566',
+            'endpoint'=> 'https://localhost.localstack.cloud:4566',
             'credentials'=>[
                 'key'=>'test',
                 'secret'=>'test'
@@ -59,7 +59,31 @@ class S3
             'Bucket' => $bucketName,
             'Key'=>'products.csv',
         ]);
-        $sesClient = new Aws\Ses\SesClient();
-        return $result['Body'];
+        if($result) {
+            $sesClient = $s3->createSes();
+
+            $result = $sesClient->verifyEmailAddress(["EmailAddress"=>"admin@admin.com"]);
+            $result = $sesClient->verifyEmailAddress(["EmailAddress"=>"user@user.com"]);
+
+            $result = $sesClient->sendEmail([
+                    'Destination' => [
+                        'ToAddresses' => ["user@user.com"],
+                    ],
+                    'Source' => "admin@admin.com",
+                    'Message' => [
+                        'Body' => [
+                            'Text' => [
+                                'Charset' => "utf-8",
+                                'Data' => "Export success!",
+                            ],
+                        ],
+                        'Subject' => [
+                            'Charset' => "utf-8",
+                            'Data' => "Export success!",
+                        ],
+                    ]
+            ]);
+        }
+        return "Success";
     }
 }
