@@ -256,3 +256,7 @@ nav a:first-child {
     background-color: #000;
     color: #fff;
 }
+#product-id a:hover {
+    border-bottom: 1px solid rgb(0 0 0 / 80%);
+    transition: .2s;
+}

@@ -13,7 +13,6 @@ class GoogleController extends AbstractController
     #[Route('/connect/google', name: 'connect_google')]
     public function connectAction(ClientRegistry $clientRegistry): \Symfony\Component\HttpFoundation\RedirectResponse
     {
-
         return $clientRegistry
             ->getClient('google')
             ->redirect();

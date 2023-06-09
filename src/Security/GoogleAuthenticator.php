@@ -46,10 +46,17 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
             new UserBadge($accessToken->getToken(), function() use ($accessToken, $client) {
                 /** @var GoogleUser $googleUser */
                 $googleUser = $client->fetchUserFromToken($accessToken);
-
                 $email = $googleUser->getEmail();
+                $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+                if(!$user){
+                    $user = new User();
+                    $user->setEmail($googleUser->getEmail());
+                    $user->setPassword($accessToken->getToken());
 
-                return $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+                    $this->entityManager->persist($user);
+                    $this->entityManager->flush();
+                }
+                return $user;
             })
         );
     }
@@ -75,7 +82,7 @@ class GoogleAuthenticator extends OAuth2Authenticator implements AuthenticationE
     public function start(Request $request, AuthenticationException $authException = null): Response
     {
         return new RedirectResponse(
-            '/connect/', // might be the site, where users choose their oauth provider
+            '/products', // might be the site, where users choose their oauth provider
             Response::HTTP_TEMPORARY_REDIRECT
         );
     }
