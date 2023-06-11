@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Service;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use Helpers\Paginate\Paginate;
+use Helpers\Paginate;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;

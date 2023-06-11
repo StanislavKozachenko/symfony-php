@@ -1,31 +1,37 @@
 <?php
-namespace Helpers\S3\S3;
-use Aws\S3\Exception\S3Exception;
-use Aws\S3\S3Client;
-use Aws\Exception\AwsException;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Routing\Annotation\Route;
+namespace Helpers;
+
+use Doctrine\DBAL\Driver\Exception;
+use function PHPUnit\Framework\throwException;
 
 class AwsServices
 {
-    public static function convertToCSV($array){
+    public static function convertToCSV($array): array|string
+    {
         $fs = fopen('products.csv', 'w');
+        $result = [];
         foreach ($array as $item) {
-            $services = "";
-            foreach ($item->getServices() as $service){
-                $services .= $service->getId() . '|' . $service->getName() . '|';
+            try {
+                $services = "";
+                foreach ($item->getServices() as $service){
+//                    $services .= $service->getId() . '|' . $service->getName() . '|';
+                    $services .= $service->getName() . '|';
+                }
+                $result = array(
+                    "name"=>$item->getName(),
+                    "cost"=>$item->getCost(),
+                    "description"=>$item->getDescription(),
+                    "customer"=>$item->getCustomer()->getName(),
+                    "services"=>$services,
+//                    "releaseDate"=>$item->getReleaseDate()->format('Y-m-d H:i:s')
+                );
+            } catch (Exception $e){
+                throwException($e);
             }
-            $result = array(
-                "name"=>$item->getName(),
-                "cost"=>$item->getCost(),
-                "description"=>$item->getDescription(),
-                "customer"=>$item->getCustomer()->getName(),
-                "services"=>$services,
-                "releaseDate"=>$item->getReleaseDate()->format('Y-m-d H:i:s')
-            );
             fputcsv($fs, $result);
         }
         fclose($fs);
+        return $result;
     }
 
     public static function init($body): string

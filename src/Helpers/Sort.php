@@ -1,6 +1,6 @@
 <?php
 
-namespace Helpers\Sort;
+namespace Helpers;
 
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\Query;

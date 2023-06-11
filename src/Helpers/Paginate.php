@@ -1,6 +1,6 @@
 <?php
 
-namespace Helpers\Paginate;
+namespace Helpers;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;

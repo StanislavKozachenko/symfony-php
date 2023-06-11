@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Customer;
 use Doctrine\ORM\EntityManagerInterface;
-use Helpers\Paginate\Paginate;
+use Helpers\Paginate;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
