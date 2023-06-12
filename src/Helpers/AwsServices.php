@@ -1,4 +1,5 @@
 <?php
+
 namespace Helpers;
 
 use Doctrine\DBAL\Driver\Exception;
@@ -6,37 +7,43 @@ use function PHPUnit\Framework\throwException;
 
 class AwsServices
 {
-    public static function convertToCSV($array): array|string
+
+    public function convertToCSV(array $array): array|string
     {
-        $fs = fopen('products.csv', 'w');
         $result = [];
         foreach ($array as $item) {
             try {
                 $services = "";
-                foreach ($item->getServices() as $service){
-//                    $services .= $service->getId() . '|' . $service->getName() . '|';
-                    $services .= $service->getName() . '|';
+                foreach ($item->getServices() as $service) {
+//                  $services .= $service->getId() . '|' . $service->getName() . '|';
+                    $services .= $service->getName() . ' |';
                 }
-                $result = array(
-                    "name"=>$item->getName(),
-                    "cost"=>$item->getCost(),
-                    "description"=>$item->getDescription(),
-                    "customer"=>$item->getCustomer()->getName(),
-                    "services"=>$services,
+                $newItem = array(
+                    "name" => $item->getName(),
+                    "cost" => $item->getCost(),
+                    "description" => $item->getDescription(),
+                    "customer" => $item->getCustomer()->getName(),
+                    "services" => $services,
 //                    "releaseDate"=>$item->getReleaseDate()->format('Y-m-d H:i:s')
                 );
-            } catch (Exception $e){
-                throwException($e);
+                $result[] = $newItem;
+            } catch (Exception $e) {
+                throwException($e)->toString();
             }
-            fputcsv($fs, $result);
         }
-        fclose($fs);
         return $result;
     }
-
-    public static function init($body): string
+    public function writeToFile(mixed $body)
     {
-        self::convertToCSV($body);
+        $fs = fopen('products.csv', 'w');
+        foreach ($body as $item) {
+            fputcsv($fs, $item);
+        }
+        fclose($fs);
+    }
+    public function init(mixed $body): string
+    {
+        $this->writeToFile($this->convertToCSV($body));
 
         $bucketName = 'product-bucket';
 

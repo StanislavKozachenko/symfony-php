@@ -179,7 +179,8 @@ class ProductsController extends AbstractController
     #[Route('/menu/product/save', name: 'product/save')]
     public function save(EntityManagerInterface $em): \Symfony\Component\HttpFoundation\RedirectResponse
     {
-        AwsServices::init($em->getRepository(\App\Entity\Product::class)->findAll());
+        $awsServices = new AwsServices();
+        $awsServices->init($em->getRepository(\App\Entity\Product::class)->findAll());
         return $this->redirectToRoute('menu');
     }
 }
