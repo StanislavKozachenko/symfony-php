@@ -11,7 +11,7 @@ services:
         - PGID=1000
         - INSTALL_XDEBUG=true
     environment:
-      PHP_IDE_CONFIG: "serverName=Docker"
+      PHP_IDE_CONFIG: "serverName=$${serverName}"
     volumes:
       - /var/www/vendor/
       - ./../:/var/www/
@@ -40,9 +40,9 @@ services:
     image: phpmyadmin/phpmyadmin:latest
     restart: always
     environment:
-      PMA_HOST: mysql
-      PMA_USER: root
-      PMA_PASSWORD: root
+      PMA_HOST: $${PMA_HOST}
+      PMA_USER: $${PMA_USER}
+      PMA_PASSWORD: $${PMA_PASSWORD}
     ports:
       - "8088:80"
   localstack:
@@ -55,8 +55,8 @@ services:
       - services=s3,ses
       - DEBUG=1
       - DOCKER_HOST=unix:///var/run/docker.sock
-      - AWS_ACCESS_KEY_ID=test
-      - AWS_SECRET_ACCESS_KEY=test
+      - AWS_ACCESS_KEY_ID=$${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=$${AWS_SECRET_ACCESS_KEY}
     volumes:
       - "localstack-data:/var/lib/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"

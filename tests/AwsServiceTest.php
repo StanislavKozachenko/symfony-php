@@ -1,19 +1,18 @@
 <?php
 
-use Helpers\AwsServices;
 
-require_once (__DIR__ . "/../src/Helpers/AwsServices.php");
+require_once (__DIR__ . "/../src/Helpers/FileHelper.php");
 
 /**
- * @uses \Helpers\AwsServices
- * (optional)@covers \Helpers\AwsServices::__construct
+ * @uses \Helpers\FileHelper
+ * (optional)@covers \Helpers\FileHelper::__construct
  */
 
 class AwsServiceTest extends \PHPUnit\Framework\TestCase
 {
     protected function setUp(): void
     {
-        $this->awsService = $this->getMockBuilder(AwsServices::class)
+        $this->fileHelper = $this->getMockBuilder(\Helpers\FileHelper::class)
             ->onlyMethods(['convertToCSV'])
             ->getMock();
     }
@@ -26,7 +25,7 @@ class AwsServiceTest extends \PHPUnit\Framework\TestCase
      */
     public function testNormalizeCSVConvert(mixed $input, mixed $expected): void
     {
-        $result = $this->awsService->convertToCSV($input);
+        $result = $this->fileHelper->convertToCSV($input);
         $this->assertEquals($result, $expected);
     }
 

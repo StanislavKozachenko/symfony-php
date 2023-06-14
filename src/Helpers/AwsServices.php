@@ -1,49 +1,14 @@
 <?php
 
 namespace Helpers;
-
-use Doctrine\DBAL\Driver\Exception;
-use function PHPUnit\Framework\throwException;
-
+use Helpers\FileHelper;
 class AwsServices
 {
 
-    public function convertToCSV(array $array): array|string
-    {
-        $result = [];
-        foreach ($array as $item) {
-            try {
-                $services = "";
-                foreach ($item->getServices() as $service) {
-//                  $services .= $service->getId() . '|' . $service->getName() . '|';
-                    $services .= $service->getName() . ' |';
-                }
-                $newItem = array(
-                    "name" => $item->getName(),
-                    "cost" => $item->getCost(),
-                    "description" => $item->getDescription(),
-                    "customer" => $item->getCustomer()->getName(),
-                    "services" => $services,
-//                    "releaseDate"=>$item->getReleaseDate()->format('Y-m-d H:i:s')
-                );
-                $result[] = $newItem;
-            } catch (Exception $e) {
-                throwException($e)->toString();
-            }
-        }
-        return $result;
-    }
-    public function writeToFile(mixed $body)
-    {
-        $fs = fopen('products.csv', 'w');
-        foreach ($body as $item) {
-            fputcsv($fs, $item);
-        }
-        fclose($fs);
-    }
     public function init(mixed $body): string
     {
-        $this->writeToFile($this->convertToCSV($body));
+        $fileHelper = new FileHelper();
+        $fileHelper->writeToFile($fileHelper->convertToCSV($body), "products.csv");
 
         $bucketName = 'product-bucket';
 
